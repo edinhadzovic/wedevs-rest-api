@@ -37,7 +37,9 @@ async function bootstrap() {
     store: new RedisStore({ client: redisClient }),
     secret: config.get('SESSION_SECRET'),
     cookie: {
-      secure: true,
+      // should be true, for now false for testing.
+      secure: false,
+      httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
     }
   }))
