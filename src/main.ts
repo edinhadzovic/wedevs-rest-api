@@ -39,8 +39,8 @@ async function bootstrap() {
       httpOnly: true,
       sameSite: 'none',
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      path: 'herokuapp.com'
-    }
+      domain: 'herokuapp.com'
+    },
   }))
 
   app.use(passport.initialize())
