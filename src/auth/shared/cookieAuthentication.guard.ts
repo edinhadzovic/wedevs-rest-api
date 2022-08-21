@@ -9,6 +9,6 @@ export class CookieAuthenticationGuard implements CanActivate {
     if (!isAuthenticated) {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
-    return context.switchToHttp().getRequest().isAuthenticated();
+    return isAuthenticated;
   }
 }
