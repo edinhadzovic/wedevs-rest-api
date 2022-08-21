@@ -31,14 +31,13 @@ async function bootstrap() {
   const redisClient = bootstrapRediClient(config);
   const RedisStore = connectRedis(session);
   
-  redisClient.connect().then(( ) => console.log("Redis Client Connected Successfully")).catch(err => console.log(err));
+  await redisClient.connect();
   
   app.use(session({
     store: new RedisStore({ client: redisClient }),
     secret: config.get('SESSION_SECRET'),
     cookie: {
-      secure: false,
-      httpOnly: false,
+      secure: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
     }
   }))
