@@ -39,7 +39,7 @@ async function bootstrap() {
     cookie: {
       // should be true, for now false for testing.
       secure: false,
-      httpOnly: true,
+      httpOnly: false,
       maxAge: 1000 * 60 * 60 * 24 * 7,
     }
   }))
