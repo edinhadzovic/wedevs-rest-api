@@ -31,7 +31,7 @@ async function bootstrap() {
   const redisClient = bootstrapRediClient(config);
   const RedisStore = connectRedis(session);
   
-  redisClient.connect();
+  redisClient.connect().then(( ) => console.log("Redis Client Connected Successfully")).catch(err => console.log(err));
   
   app.use(session({
     store: new RedisStore({ client: redisClient }),
