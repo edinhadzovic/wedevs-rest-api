@@ -6,6 +6,7 @@ import { ExecutionContext, Injectable, CanActivate, HttpException, HttpStatus } 
 export class CookieAuthenticationGuard implements CanActivate {
   async canActivate(context: ExecutionContext) {
     const isAuthenticated = context.switchToHttp().getRequest().isAuthenticated();
+    console.log("CookieAuthenticationGuard isAuthenticated: ", isAuthenticated);
     if (!isAuthenticated) {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }

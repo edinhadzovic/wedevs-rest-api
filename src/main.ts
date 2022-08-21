@@ -35,7 +35,7 @@ async function bootstrap() {
     secret: config.get('SESSION_SECRET'),
     cookie: {
       // should be true, for now false for testing.
-      secure: true,
+      secure: false,
       httpOnly: true,
       sameSite: 'none',
       maxAge: 1000 * 60 * 60 * 24 * 7,
