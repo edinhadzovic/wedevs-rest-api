@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
 
 function bootstrapRediClient(config: ConfigService) {
   if (config.get('NODE_ENV') === 'production') {
-    return createClient({url: config.get('REDIS_URL_TLS'), socket: {
+    return createClient({url: config.get('REDIS_URL_TLS'), legacyMode: true, socket: {
       tls: true,
       rejectUnauthorized: false
     }});
