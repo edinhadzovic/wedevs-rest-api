@@ -9,10 +9,7 @@ import { ConfigService } from '@nestjs/config';
 
 function bootstrapRediClient(config: ConfigService) {
   if (config.get('NODE_ENV') === 'production') {
-    return createClient({url: config.get('REDIS_URL_TLS'), legacyMode: true, socket: {
-      tls: true,
-      rejectUnauthorized: false
-    }});
+    return createClient({url: config.get('REDIS_URL'), legacyMode: true});
   }
   return createClient({password: config.get('REDIS_PASSWORD'), legacyMode: true, url: config.get('REDIS_URL')});
 }
@@ -21,7 +18,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {cors: {
     origin: process.env.CORS_ORIGIN,
     credentials: true
-  }, logger: console});
+  }});
 
 
   const prismaService = app.get(PrismaService);
