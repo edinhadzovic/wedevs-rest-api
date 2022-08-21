@@ -7,9 +7,16 @@ import * as passport from 'passport';
 import { PrismaService } from './prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 
+function bootstrapRediClient(config: ConfigService) {
+  if (config.get('NODE_ENV') === 'production') {
+    return createClient({url: config.get('REDIS_URL')});
+  }
+  return createClient({password: config.get('REDIS_PASSWORD'), legacyMode: true, url: config.get('REDIS_URL')});
+}
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {cors: {
-    origin: "http://localhost:3001",
+    origin: process.env.CORS_ORIGIN,
     credentials: true
   }, logger: console});
 
@@ -18,14 +25,14 @@ async function bootstrap() {
   const config = app.get(ConfigService);
   await prismaService.enableShutdownHooks(app);
 
-  const redisClient = createClient({password: 'eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81', legacyMode: true});
+  const redisClient = bootstrapRediClient(config);
   const RedisStore = connectRedis(session);
   
   redisClient.connect();
   
   app.use(session({
     store: new RedisStore({ client: redisClient }),
-    secret: "iopajsfiojasiofjio",
+    secret: config.get('SESSION_SECRET'),
     cookie: {
       secure: false,
       httpOnly: false,

@@ -21,6 +21,10 @@ import { PrismaService } from './prisma/prisma.service';
       GITHUB_CALLBACK_URL: Joi.string().required(),
       GITHUB_SCOPE: Joi.string().required(),
       CORE_WEB_APP: Joi.string().required(),
+      REDIS_URL: Joi.string().required(),
+      REDIS_PASSWORD: Joi.string(),
+      CORS_ORIGIN: Joi.string().required(),
+      SESSION_SECRET: Joi.string().required(),
     }),
     isGlobal: true
   }), GithubOauthModule, UserModule],
