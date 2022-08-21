@@ -39,7 +39,7 @@ async function bootstrap() {
       httpOnly: true,
       sameSite: 'none',
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      domain: 'herokuapp.com'
+      domain: 'easytojob.at'
     },
   }))
 
