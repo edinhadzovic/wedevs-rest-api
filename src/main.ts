@@ -37,7 +37,6 @@ async function bootstrap() {
       // should be true, for now false for testing.
       secure: false,
       httpOnly: true,
-      sameSite: 'none',
       maxAge: 1000 * 60 * 60 * 24 * 7,
       domain: 'easytojob.at'
     },
