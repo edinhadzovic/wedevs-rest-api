@@ -5,6 +5,7 @@ import * as session from "express-session";
 import * as connectRedis from "connect-redis";
 import * as passport from 'passport';
 import { PrismaService } from './prisma/prisma.service';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {cors: {
@@ -14,6 +15,7 @@ async function bootstrap() {
 
 
   const prismaService = app.get(PrismaService);
+  const config = app.get(ConfigService);
   await prismaService.enableShutdownHooks(app);
 
   const redisClient = createClient({password: 'eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81', legacyMode: true});
@@ -33,6 +35,6 @@ async function bootstrap() {
 
   app.use(passport.initialize())
   app.use(passport.session());
-  await app.listen(3000);
+  await app.listen(config.get('PORT'));
 }
 bootstrap();
