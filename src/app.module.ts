@@ -6,7 +6,6 @@ import { AppService } from './app.service';
 import { GithubOauthController } from './auth/github/github-oauth.controller';
 import { GithubOauthModule } from './auth/github/github-oauth.module';
 import { GithubOauthService } from './auth/github/github-oauth.service';
-import { JwtAuthModule } from './auth/jwt/jwt.module';
 import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
 import { UserService } from './user/user.service';
@@ -24,7 +23,7 @@ import { PrismaService } from './prisma/prisma.service';
       CORE_WEB_APP: Joi.string().required(),
     }),
     isGlobal: true
-  }), GithubOauthModule, JwtAuthModule, UserModule],
+  }), GithubOauthModule, UserModule],
   controllers: [AppController, GithubOauthController, UserController],
   providers: [AppService, UserService,GithubOauthService, UserService, PrismaService],
 })
