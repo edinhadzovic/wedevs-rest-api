@@ -10,6 +10,7 @@ import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
 import { UserService } from './user/user.service';
 import { PrismaService } from './prisma/prisma.service';
+import { InterestsModule } from './interests/interests.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -28,7 +29,7 @@ import { PrismaService } from './prisma/prisma.service';
       SESSION_SECRET: Joi.string().required(),
     }),
     isGlobal: true
-  }), GithubOauthModule, UserModule],
+  }), GithubOauthModule, UserModule, InterestsModule],
   controllers: [AppController, GithubOauthController, UserController],
   providers: [AppService, UserService,GithubOauthService, UserService, PrismaService],
 })

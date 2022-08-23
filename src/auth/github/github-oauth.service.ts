@@ -22,12 +22,14 @@ export class GithubOauthService {
     async findOrCreate(user: Prisma.UserCreateInput) {
         try {
             const foundUser = await this.prisma.user.findFirst({
-                where: { email: user.email },
+                where: { email: user.email }, 
+                include: {interests: true}
             });
 
             if (!foundUser) {
                 return await this.prisma.user.create({
-                    data: user
+                    data: user,
+                    include: {interests: true}
                   })
             }
 
@@ -59,6 +61,6 @@ export class GithubOauthService {
 
 
     findById(id: string): any {
-        return this.prisma.user.findFirst({where: {id}});
+        return this.prisma.user.findFirst({where: {id}, include: {interests: true}});
     }
 }
