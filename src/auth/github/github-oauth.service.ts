@@ -2,7 +2,7 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { Request } from 'express';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserService } from '../../user/user.service';
+import { UserService } from '../../users/users.service';
 
 @Injectable()
 export class GithubOauthService {

@@ -1,12 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Query } from '@nestjs/common';
 import { Request } from "express";
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UserService } from './users.service';
+import { CreateUsersDto } from './dto/create-users.dto';
+import { UpdateUsersDto } from './dto/update-users.dto';
 import { CookieAuthenticationGuard } from 'src/auth/shared/cookieAuthentication.guard';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
+import { any } from 'joi';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -26,8 +27,15 @@ export class UserController {
 
   @Get()
   @UseGuards(CookieAuthenticationGuard)
-  findAll(@Req() req: Request) {
-    console.log(req.user);
+  findAll(
+    @Req() req: Request,
+    @Query('suggest') suggest: boolean,
+  ) {
+    const user = req.user as User;
+    if (suggest) {
+      return this.userService.findAllSuggest(user);
+    }
+
     return this.userService.findAll();
   }
 

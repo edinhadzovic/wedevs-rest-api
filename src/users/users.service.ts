@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
-import console from 'console';
+import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUsersDto } from './dto/create-users.dto';
 
 @Injectable()
 export class UserService {
@@ -37,7 +35,7 @@ export class UserService {
     }
   }
 
-  create(createUserDto: CreateUserDto) {
+  create(createUserDto: CreateUsersDto) {
     return 'This action adds a new user';
   }
 
@@ -74,5 +72,12 @@ export class UserService {
 
   remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  async findAllSuggest(user: User) {
+    const findUserInterests = await this.prisma.userInterest.findMany({ where: { userId: user.id }, select: {interestId: true} });
+    const flatFindUserInterests = findUserInterests.map((interest: any) => interest.interestId);
+    const findAllUserWithSameInterests = await this.prisma.user.findMany({include: {interests: true}, where: { interests: { some: { interestId: {in: flatFindUserInterests}} }, id: {not: user.id} }});
+    return findAllUserWithSameInterests;
   }
 }

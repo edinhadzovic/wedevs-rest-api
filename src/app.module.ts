@@ -6,9 +6,9 @@ import { AppService } from './app.service';
 import { GithubOauthController } from './auth/github/github-oauth.controller';
 import { GithubOauthModule } from './auth/github/github-oauth.module';
 import { GithubOauthService } from './auth/github/github-oauth.service';
-import { UserController } from './user/user.controller';
-import { UserModule } from './user/user.module';
-import { UserService } from './user/user.service';
+import { UserController } from './users/users.controller';
+import { UserModule } from './users/users.module';
+import { UserService } from './users/users.service';
 import { PrismaService } from './prisma/prisma.service';
 import { InterestsModule } from './interests/interests.module';
 
