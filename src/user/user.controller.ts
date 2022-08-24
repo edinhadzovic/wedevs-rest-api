@@ -4,6 +4,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CookieAuthenticationGuard } from 'src/auth/shared/cookieAuthentication.guard';
+import { Prisma } from '@prisma/client';
 
 @Controller('user')
 export class UserController {
@@ -16,6 +17,13 @@ export class UserController {
     return user;
   }
 
+  @Patch('me')
+  @UseGuards(CookieAuthenticationGuard)
+  async updateUser(@Req() req: Request, @Body() updateUserDto: Prisma.UserCreateInput) {
+    const user = req.user as any;
+    return this.userService.update(user.id, updateUserDto);
+  }
+
   @Get()
   @UseGuards(CookieAuthenticationGuard)
   findAll(@Req() req: Request) {
@@ -26,11 +34,6 @@ export class UserController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
   }
 
   @Delete(':id')

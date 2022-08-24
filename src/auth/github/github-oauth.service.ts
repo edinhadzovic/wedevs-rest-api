@@ -60,7 +60,11 @@ export class GithubOauthService {
     }
 
 
-    findById(id: string): any {
-        return this.prisma.user.findFirst({where: {id}, include: {interests: true}});
+    async findById(id: string) {
+        const {interests, ...user} = await this.prisma.user.findFirst({where: {id}, include: {interests: { include: {interest: true} }}});
+        return {
+            ...user,
+            interests: interests.map(interest => interest.interest),
+        }
     }
 }

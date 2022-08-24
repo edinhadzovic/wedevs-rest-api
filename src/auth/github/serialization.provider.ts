@@ -13,9 +13,9 @@ export class GithubOauthSerializer extends PassportSerializer {
     done(null, { id: user.id, role: user.role });
   }
 
-  deserializeUser(payload: { id: string; }, done: (err: Error, user: Omit<any, 'password'>) => void) {
+  async deserializeUser(payload: { id: string; }, done: (err: Error, user: Omit<any, 'password'>) => void) {
     console.log("deserialzier", payload)
-    const user = this.authService.findById(payload.id);
+    const user = await this.authService.findById(payload.id);
     
     done(null, user);
   }
