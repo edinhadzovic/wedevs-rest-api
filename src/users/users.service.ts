@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUsersDto } from './dto/create-users.dto';
+import { findUsersWithSameInterestsQuery } from './users.queries';
 
 @Injectable()
 export class UserService {
@@ -77,7 +78,28 @@ export class UserService {
   async findAllSuggest(user: User) {
     const findUserInterests = await this.prisma.userInterest.findMany({ where: { userId: user.id }, select: {interestId: true} });
     const flatFindUserInterests = findUserInterests.map((interest: any) => interest.interestId);
-    const findAllUserWithSameInterests = await this.prisma.user.findMany({include: {interests: true}, where: { interests: { some: { interestId: {in: flatFindUserInterests}} }, id: {not: user.id} }});
+    const findAllUserWithSameInterests = 
+    await this.prisma.user.findMany(findUsersWithSameInterestsQuery(user.id, flatFindUserInterests));
     return findAllUserWithSameInterests;
+  }
+
+  async follow(id: string, user: User) {
+    return this.prisma.follows.create({
+      data: {
+        followerId: user.id,
+        followingId: id,
+      }
+    })
+  }
+
+  async unfollow(id: string, user: User) {
+    return this.prisma.follows.delete({
+      where: {
+        followerId_followingId: {
+          followerId: user.id,
+          followingId: id
+        }
+      }
+    });
   }
 }

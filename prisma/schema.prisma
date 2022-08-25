@@ -1,6 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Should revisit follow logic
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -23,6 +25,8 @@ model User {
   bio         String?
   newUser     Boolean @default(true)
   interests   UserInterest[]
+  following   Follows[] @relation("follower")
+  followers   Follows[] @relation("following")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -44,4 +48,17 @@ model UserInterest {
   updatedAt   DateTime @updatedAt
 
   @@id([userId, interestId])
+  @@unique([userId, interestId])
+}
+
+model Follows {
+  follower      User     @relation("follower", fields: [followerId], references: [id])
+  followerId    String
+  following     User     @relation("following", fields: [followingId], references: [id])
+  followingId   String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@id([followerId, followingId])
+  @@unique([followerId, followingId])
 }
