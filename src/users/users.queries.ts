@@ -3,7 +3,7 @@ import { Prisma } from "@prisma/client";
 export const findUsersWithSameInterestsQuery = (id: string, interest: string[]) => ({
     include: {
       interests: true,
-      follower: {
+      followers: {
         where: {
           followerId: id
         }
