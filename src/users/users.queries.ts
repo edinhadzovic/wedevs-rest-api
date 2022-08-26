@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 
-export const findUsersWithSameInterestsQuery = (id: string, interest: string[]) => ({
+export const findUsersWithSameInterestsQuery = (id: string, interest: string[]): Prisma.UserFindManyArgs => ({
     include: {
       interests: true,
       followers: {
@@ -20,4 +20,4 @@ export const findUsersWithSameInterestsQuery = (id: string, interest: string[]) 
         not: id
       }
     },
-  } as Prisma.UserFindManyArgs);
+  });

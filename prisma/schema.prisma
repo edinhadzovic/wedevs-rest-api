@@ -12,6 +12,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum StoryState {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
 
 model User {
   id          String @id @default(cuid())
@@ -27,6 +32,9 @@ model User {
   interests   UserInterest[]
   following   Follows[] @relation("follower")
   followers   Follows[] @relation("following")
+  stories     Story[]
+  likes       Like[]
+  comments    Comment[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -37,6 +45,33 @@ model Interest {
   users       UserInterest[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Story {
+  id          String @id @default(cuid())
+  title       String
+  slug        String @unique
+  contentRaw  String
+  contentHTML String
+  state       StoryState @default(DRAFT)
+  author      User @relation(fields: [authorId], references: [id])
+  authorId    String
+  likes       Like[]
+  comments    Comment[]
+  published   Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Comment {
+  id        String @id @default(cuid())
+  content   String
+  author    User @relation(fields: [authorId], references: [id])
+  authorId  String
+  story     Story @relation(fields: [storyId], references: [id])
+  storyId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model UserInterest {
@@ -61,4 +96,16 @@ model Follows {
 
   @@id([followerId, followingId])
   @@unique([followerId, followingId])
+}
+
+model Like {
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  story       Story    @relation(fields: [storyId], references: [id])
+  storyId     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@id([userId, storyId])
+  @@unique([userId, storyId])
 }
